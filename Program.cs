@@ -40,6 +40,8 @@ app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
 app.MapMethods(CategoryGet.Template, CategoryGet.Methods, CategoryGet.Handle);
 app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle);
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
+app.MapMethods(EmployeeGetPage.Template, EmployeeGetPage.Methods, EmployeeGetPage.Handle);
+app.MapMethods(EmployeeGetAllDapper.Template, EmployeeGetAllDapper.Methods, EmployeeGetAllDapper.Handle);
 
 
 app.Run();
