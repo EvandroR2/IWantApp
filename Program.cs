@@ -1,5 +1,6 @@
 using IWantApp.Endpoints.Categories;
 using IWantApp.Endpoints.Employees;
+using IWantApp.Endpoints.Security;
 using IWantApp.infra.Data;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,6 +16,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequiredLength = 3;
 
 }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<QueryAllUsersWithClaimName>();
 
 // Add services to the container.
 
@@ -42,6 +45,8 @@ app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle)
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 app.MapMethods(EmployeeGetPage.Template, EmployeeGetPage.Methods, EmployeeGetPage.Handle);
 app.MapMethods(EmployeeGetAllDapper.Template, EmployeeGetAllDapper.Methods, EmployeeGetAllDapper.Handle);
+app.MapMethods(TokenPost.Template, TokenPost.Methods, TokenPost.Handle);
+
 
 
 app.Run();
