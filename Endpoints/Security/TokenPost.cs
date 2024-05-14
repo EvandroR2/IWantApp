@@ -1,5 +1,6 @@
 ﻿using IWantApp.Endpoints.Employees;
 using IWantApp.Endpoints.Token;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,6 +17,8 @@ public class TokenPost
 
     public static Delegate Handle => Action;
 
+
+    [AllowAnonymous]
     public static IResult Action(LoginRequest loginRequest, UserManager<IdentityUser> userManager)
     {
         var user = userManager.FindByEmailAsync(loginRequest.Email).Result;
@@ -24,7 +27,8 @@ public class TokenPost
         if (!userManager.CheckPasswordAsync(user , loginRequest.Password).Result)
             Results.BadRequest();
         
-        var key = Encoding.ASCII.GetBytes("A@fderwFQQSDXCCer34A@fderwFQQSDXCCer34");
+        var key = Encoding.ASCII.GetBytes("jwtBeareTokenSettings:SecretKey");
+        //var key = Encoding.ASCII.GetBytes("A@fderwFQQSDXCCer34A@fderwFQQSDXCCer34");
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -33,7 +37,8 @@ public class TokenPost
                 new Claim(ClaimTypes.Email, loginRequest.Email),
             }),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            Audience = "IWantApp", Issuer = "Issuer"
+            Audience = "jwtBeareTokenSettings:Audience", 
+            Issuer = "jwtBeareTokenSettings:Issuer"
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

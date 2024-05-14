@@ -1,5 +1,6 @@
 ﻿using IWantApp.Domain.Produtcs;
 using IWantApp.infra.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -11,6 +12,7 @@ public class CategoryPost
 
     public static Delegate Handle => Action;
 
+    [Authorize]//[AllowAnonymous] //[Authorize]
     public static IResult Action(CategoryRequest categoryRequest, ApplicationDbContext context)
     {
         var category = new Category(categoryRequest.Name, "teste CreateBy", "teste Edite");
