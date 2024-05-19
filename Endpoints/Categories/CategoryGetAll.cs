@@ -1,5 +1,6 @@
 ﻿using IWantApp.Domain.Produtcs;
 using IWantApp.infra.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -11,6 +12,7 @@ public class CategoryGetAll
 
     public static Delegate Handle => Action;
 
+    [Authorize(Policy = "EmployeePolicy")]
     public static IResult Action(ApplicationDbContext context)
     {
         var categories = context.Categories.ToList();
