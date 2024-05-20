@@ -42,10 +42,14 @@ public class Category : Entity
         AddNotifications(contract);
     }
 
-    public void EditInfo(string name,bool active) 
+    public void EditInfo(string name,bool active, string editeBy) 
     { 
         Active = active;
         Name = name;
+        EditeBy = editeBy;
+        EditeOn = DateTime.Now;
+
+        
 
         Validate();
     }

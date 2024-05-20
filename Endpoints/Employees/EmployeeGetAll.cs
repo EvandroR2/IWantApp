@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace IWantApp.Endpoints.Employees;
@@ -11,6 +12,7 @@ public class EmployeeGetAll
 
     public static Delegate Handle => Action;
 
+    [Authorize(Policy = "Employee005Policy")]
     public static IResult Action(UserManager<IdentityUser> userManager)
     {
         var user = userManager.Users.ToList();

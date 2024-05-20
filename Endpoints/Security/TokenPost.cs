@@ -3,6 +3,7 @@ using IWantApp.Endpoints.Token;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -19,28 +20,33 @@ public class TokenPost
 
 
     [AllowAnonymous]
-    public static IResult Action(LoginRequest loginRequest, UserManager<IdentityUser> userManager)
+    public static IResult Action(LoginRequest loginRequest, IConfiguration configuration ,UserManager<IdentityUser> userManager)
     {
         var user = userManager.FindByEmailAsync(loginRequest.Email).Result;
         if (user == null)
             Results.BadRequest();
         if (!userManager.CheckPasswordAsync(user , loginRequest.Password).Result)
             Results.BadRequest();
-        
-        var key = Encoding.ASCII.GetBytes("jwtBeareTokenSettings:SecretKey");
+
+        var claims = userManager.GetClaimsAsync(user).Result;
+        var subjet = new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.Email, loginRequest.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+        });
+        subjet.AddClaims(claims);
+
+        var key = Encoding.ASCII.GetBytes(configuration["jwtBeareTokenSettings:SecretKey"]);
         //var key = Encoding.ASCII.GetBytes("A@fderwFQQSDXCCer34A@fderwFQQSDXCCer34");
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Email, loginRequest.Email),
-                new Claim("EmployeeCode", "1"),
-            }),
+            Subject = subjet,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            Audience = "jwtBeareTokenSettings:Audience", 
-            Issuer = "jwtBeareTokenSettings:Issuer"
+            Audience = configuration["jwtBeareTokenSettings:Audience"], 
+            Issuer = configuration["jwtBeareTokenSettings:Issuer"],
+            Expires = DateTime.UtcNow.AddSeconds(30)
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -30,6 +30,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("EmployeePolicy", p => 
         p.RequireAuthenticatedUser()
             .RequireClaim("EmployeeCode"));
+    options.AddPolicy("Employee005Policy", p =>
+        p.RequireAuthenticatedUser()
+            .RequireClaim("EmployeeCode","005"));
 });
 builder.Services.AddAuthentication(x =>
 {
@@ -45,6 +48,7 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
         ValidIssuer = builder.Configuration["jwtBeareTokenSettings:Issuer"],
         ValidAudience = builder.Configuration["jwtBeareTokenSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
