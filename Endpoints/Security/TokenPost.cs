@@ -46,7 +46,7 @@ public class TokenPost
                 new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Audience = configuration["jwtBeareTokenSettings:Audience"], 
             Issuer = configuration["jwtBeareTokenSettings:Issuer"],
-            Expires = DateTime.UtcNow.AddSeconds(30)
+            Expires = DateTime.UtcNow.AddDays(1)
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
