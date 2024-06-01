@@ -1,4 +1,5 @@
-﻿using IWantApp.infra.Data;
+﻿using IWantApp.Domain.Produtcs;
+using IWantApp.infra.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -26,7 +27,7 @@ public class ProductsPost
         await context.Products.AddAsync(product);
         await context.SaveChangesAsync();
 
-        return Results.Created($"/products/{product.Id]",product.Id);
+        return Results.Created($"/products/{product.Id}",product.Id);
     }
 
 }

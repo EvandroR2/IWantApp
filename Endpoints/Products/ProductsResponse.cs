@@ -1,5 +1,3 @@
 ﻿namespace IWantApp.Endpoints.Products;
 
-public class ProductsResponse
-{
-}
+public record ProductsResponse(string Name, string CategoryName, string Description, bool HasStock, bool Active);
